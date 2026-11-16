@@ -1,17 +1,18 @@
 ﻿<!-- Common Project Tags:
-command-line 
-console-applications 
+aspect-ratio
 desktop-app 
 desktop-application 
 dotnet 
-dotnet-core 
-netcore 
+file-organizer
+image-processing
+images
 netframework 
 netframework48 
 tool 
 tools 
 vbnet 
 visualstudio 
+wallpapers
 windows 
 windows-app 
 windows-application 
@@ -23,9 +24,9 @@ winforms
 <div align="center">
   <img src="/Images/App.ico" width="100" alt="Logo">
   
-  <h1>PROJECT NAME</h1>
+  <h1>Image Aspect Ratio Grouper</h1>
 
-### PROJECT DESCRIPTION
+### A desktop tool to group image files into folders by aspect ratio.
 
 </div>
 
@@ -62,18 +63,28 @@ winforms
 
 ## 👋 Introduction
 
-INTRODUCTION TEXT
+**Image Aspect Ratio Grouper** is a desktop utility that scans a folder of images (optionally including all its subfolders) and sorts every image into a subfolder according to a target aspect ratio of your choice, such as 16:9, 16:10, 21:9, 32:9, 4:3, 9:16, 9:19.5 or 9:20, among other common desktop and mobile ratios.
+
+For every image, the program decides where it belongs:
+
+- **Already conforming:** the image already matches the target ratio (within a configurable pixel tolerance), and it is moved to the `# Already <ratio>` folder.
+- **Croppable:** the image is taller than the target ratio, and it is moved to a folder named after its optimal downwards crop height (for example, a 1990x1323 image goes to the `1118` folder for 16:9).
+- **Incompatible:** the image is wider than the target ratio (no downwards crop can fix it), or its resulting height would be smaller than a configurable minimum, and it is moved to the `# Incompatible <ratio>` folder.
+
+The result is a collection organized so that every image in the same folder can be bulk-cropped to the same resolution, without any manual calculations.
 
 ## 💡 Motivation
 
-MOTIVATION TEXT
+Keeping a wallpaper collection consistent is a grind. Images come in every imaginable resolution, and making them fit a 16:9 desktop (or a 9:20 phone) means checking each image's dimensions, calculating the right crop height, and remembering which ones can't be fixed at all. Doing that by hand for thousands of files is an absurd waste of time. I built this tool to do all the math for me and leave the collection grouped and ready for batch cropping.
 
 ##### ⚡ The Real Question
-###### REAL QUESTION TEXT
+###### Why calculate the crop height of thousands of images one by one, when a purpose-built tool can group your whole collection by aspect ratio in seconds?.
 
 ## 🖼️ Screenshots
 
-![screenshot](/Images/screenshot.png)
+<div align="center">
+  <img src="/Images/screenshot1.png" width="49%" alt="Screenshot 1">&nbsp;<img src="/Images/screenshot2.png" width="49%" alt="Screenshot 2">
+</div>
 
 ## 🎦 Videos
 
@@ -82,21 +93,26 @@ MOTIVATION TEXT
 <!-- See a recorded video by clicking on the following button:
 [![PROJECT_NAME DEMO VIDEO](Images/demo_video.jpg)](https://www.youtube.com/watch?v=XXXXXXXXX)  -->
 
-## 🤖 Features
+## ✨ Features
 
-FEATURES TEXT
-
-## ⚠️ Limitations
-
-LIMITATIONS TEXT
+- Common desktop (landscape) and mobile (portrait) aspect ratios to choose from.
+- Configurable pixel tolerance and minimum resulting height.
+- Optional search in all subdirectories.
+- Fast, multi-threaded processing that can be cancelled at any time.
+- Real-time output log, and a progress bar that reports the final result (errors or warnings).
+- Safe to run again over an already grouped folder: images already in their target folder are skipped, and existing files are never overwritten.
+- Dark and light themes.
+- Drag and drop a folder onto the window to select it.
+- Remembers your preferences between sessions.
 
 ## 📝 Requirements
 
 - Microsoft Windows OS.
+- .NET Framework 4.8 (already included in Windows 10 version 1903 and newer).
 
 ## 🚀 Getting Started
 
-1. Navigate to the **[Releases page](https://github.com/ElektroStudios/PROJECT_NAME/releases/latest)**.
+1. Navigate to the **[Releases page](https://github.com/ElektroStudios/Image-Aspect-Ratio-Grouper/releases/latest)**.
 2. Download the latest `.zip` archive or the `.exe` setup installer, depending on your preference.
 3. If you downloaded the `.zip` archive, extract its contents to your preferred directory.
    <br> 
@@ -109,15 +125,9 @@ Explore the complete list of changes, bug fixes, and improvements across differe
 
 ------------------
 
-## 🏆 Credits
-
-This work relies on the following technologies, libraries or resources: 
-
- - [.NET Framework](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
-
 ## 💪 Contributing
 
-Your contribution is highly appreciated!. If you have any ideas, suggestions, or encounter issues, feel free to open an issue by clicking [here](https://github.com/ElektroStudios/PROJECT_NAME/issues/new/choose). 
+Your contribution is highly appreciated!. If you have any ideas, suggestions, or encounter issues, feel free to open an issue by clicking [here](https://github.com/ElektroStudios/Image-Aspect-Ratio-Grouper/issues/new/choose). 
 
 Your input helps make this Work better for everyone. Thank you for your support! 🚀
 
@@ -139,6 +149,13 @@ This work is distributed for educational purposes and without any profit motive.
 </div>
 
 ------------------
+
+## 🏆 Credits
+
+This work relies on the following technologies and libraries: 
+
+ - [.NET Framework](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
+ - [Ookii.Dialogs.WinForms](https://github.com/ookii-dialogs/ookii-dialogs-winforms)
 
 ## ⚠️ Disclaimer
 
