@@ -38,7 +38,7 @@ build_script:
   - msbuild "Source\%APP_DIR_NAME%.Tests\%APP_DIR_NAME%.Tests.vbproj" /p:Configuration=%configuration% -restore
 
 test_script:
-  - '"Source\%APP_DIR_NAME%.Tests\bin\%configuration%\net48\%APP_DIR_NAME%.Tests.exe"'
+  - call "Source\%APP_DIR_NAME%.Tests\bin\%configuration%\net48\%APP_DIR_NAME%.Tests.exe"
 
 after_build:
   - >-
