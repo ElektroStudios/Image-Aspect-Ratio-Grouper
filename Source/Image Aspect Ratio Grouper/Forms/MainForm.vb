@@ -216,13 +216,6 @@ Namespace ImageAspectRatioGrouper.Forms
             UserPreferences.Save()
         End Sub
 
-        ''' <summary>
-        ''' Clicking the "Dark mode" caption toggles the switch too.
-        ''' </summary>
-        Private Sub ThemeLabelItem_Click(sender As Object, e As EventArgs) Handles themeLabelItem.Click
-            Me.themeToggleItem.Checked = Not Me.themeToggleItem.Checked
-        End Sub
-
 #End Region
 
 #Region " Event Handlers (Configuration) "
@@ -232,15 +225,6 @@ Namespace ImageAspectRatioGrouper.Forms
         ''' </summary>
         Private Sub BrowseButton_Click(sender As Object, e As EventArgs) Handles browseButton.Click
             Me.BrowseForDirectory()
-        End Sub
-
-        ''' <summary>
-        ''' Clicking the "Include subdirectories" caption toggles the switch too.
-        ''' </summary>
-        Private Sub RecursiveLabel_Click(sender As Object, e As EventArgs) Handles recursiveLabel.Click
-            If Me.recursiveToggle.Enabled Then
-                Me.recursiveToggle.Checked = Not Me.recursiveToggle.Checked
-            End If
         End Sub
 
         ''' <summary>
@@ -776,10 +760,10 @@ Namespace ImageAspectRatioGrouper.Forms
         End Sub
 
         ''' <summary>
-        ''' Shows "Dark mode" or "Light mode" next to the theme toggle, according to the active theme.
+        ''' Shows "Dark mode" or "Light mode" as the theme toggle caption, according to the active theme.
         ''' </summary>
         Private Sub UpdateThemeCaption()
-            Me.themeLabelItem.Text = If(ThemeManager.CurrentTheme = AppTheme.Dark, "Dark mode", "Light mode")
+            Me.themeToggleItem.Text = If(ThemeManager.CurrentTheme = AppTheme.Dark, "Dark mode", "Light mode")
         End Sub
 
         ''' <summary>

@@ -140,7 +140,10 @@ Namespace ImageAspectRatioGrouper.Controls
                 Me.innerTextBox.Multiline = value
                 Me.innerTextBox.ScrollBars = If(value, ScrollBars.Vertical, ScrollBars.None)
                 Me.innerTextBox.WordWrap = value
-                Me.Height = Me.Height ' Re-evaluates the height constraint in SetBoundsCore.
+                If Not value Then
+                    Me.Height = Me.SingleLineHeight
+                End If
+
                 Me.PerformLayout()
             End Set
         End Property
@@ -257,7 +260,12 @@ Namespace ImageAspectRatioGrouper.Controls
             End If
 
             Me.innerTextBox.Font = Me.Font
-            Me.Height = Me.Height ' Re-evaluates the height constraint in SetBoundsCore.
+            ' Assigning the current height to itself would not re-evaluate the constraint
+            ' (WinForms skips SetBoundsCore when the bounds do not change), so the new height is assigned.
+            If Not Me.innerTextBox.Multiline Then
+                Me.Height = Me.SingleLineHeight
+            End If
+
             Me.PerformLayout()
         End Sub
 

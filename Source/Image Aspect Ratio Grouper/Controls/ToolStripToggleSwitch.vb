@@ -18,6 +18,9 @@ Namespace ImageAspectRatioGrouper.Controls
     ''' <summary>
     ''' A <see cref="ToolStripControlHost"/> that hosts a <see cref="Controls.ToggleSwitch"/>,
     ''' so a toggle can live inside a <see cref="MenuStrip"/> or a <see cref="ToolStrip"/> (e.g. in its right corner).
+    ''' <para></para>
+    ''' The item <see cref="ToolStripItem.Text"/> is the caption drawn by the hosted toggle switch itself, which keeps it
+    ''' optically centered on the track (unlike a separate <see cref="ToolStripLabel"/>), and the item sizes itself to fit.
     ''' </summary>
     <ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip Or
                                        ToolStripItemDesignerAvailability.ToolStrip Or
@@ -45,9 +48,9 @@ Namespace ImageAspectRatioGrouper.Controls
         Public Sub New()
             MyBase.New(New ToggleSwitch())
 
-            Me.AutoSize = False
-            Me.Size = Me.DefaultSize
+            Me.AutoSize = True
             AddHandler Me.ToggleSwitch.CheckedChanged, AddressOf Me.ToggleSwitch_CheckedChanged
+            AddHandler Me.ToggleSwitch.SizeChanged, AddressOf Me.ToggleSwitch_SizeChanged
         End Sub
 
 #End Region
@@ -78,13 +81,6 @@ Namespace ImageAspectRatioGrouper.Controls
             Set(value As Boolean)
                 Me.ToggleSwitch.Checked = value
             End Set
-        End Property
-
-        ''' <inheritdoc/>
-        Protected Overrides ReadOnly Property DefaultSize As Size
-            Get
-                Return New Size(40, 20)
-            End Get
         End Property
 
         ''' <inheritdoc/>
@@ -132,6 +128,16 @@ Namespace ImageAspectRatioGrouper.Controls
         ''' </summary>
         Private Sub ToggleSwitch_CheckedChanged(sender As Object, e As EventArgs)
             Me.OnCheckedChanged(e)
+        End Sub
+
+        ''' <summary>
+        ''' Re-lays out the owner tool strip when the hosted toggle switch resizes itself (e.g. its caption changed),
+        ''' so the auto-sized item and its neighbors are repositioned.
+        ''' </summary>
+        Private Sub ToggleSwitch_SizeChanged(sender As Object, e As EventArgs)
+            If Me.Owner IsNot Nothing Then
+                Me.Owner.PerformLayout()
+            End If
         End Sub
 
 #End Region

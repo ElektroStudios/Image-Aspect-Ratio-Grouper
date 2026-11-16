@@ -282,7 +282,10 @@ Namespace ImageAspectRatioGrouper.Controls
             End If
 
             Me.numericUpDown.Font = Me.Font
-            Me.Height = Me.Height ' Re-evaluates the height constraint in SetBoundsCore.
+
+            ' Assigning the current height to itself would not re-evaluate the constraint
+            ' (WinForms skips SetBoundsCore when the bounds do not change), so the new height is assigned.
+            Me.Height = Me.FixedHeight
             Me.PerformLayout()
         End Sub
 

@@ -56,26 +56,30 @@ Namespace ImageAspectRatioGrouper.Tests.TestInfrastructure
 #Region " Public Methods "
 
         ''' <summary>
-        ''' Creates a directory symbolic link (Unix only), using the system <c>ln</c> tool.
+        ''' Creates a directory link that points to <paramref name="targetPath"/>, without requiring elevation:
+        ''' a junction (<c>mklink /J</c>) on Windows, or a symbolic link (<c>ln -s</c>) on Unix.
         ''' </summary>
         ''' <param name="linkPath">The path of the link to create.</param>
         ''' <param name="targetPath">The directory the link points to.</param>
-        ''' <exception cref="PlatformNotSupportedException">Thrown when not running on Unix.</exception>
-        ''' <exception cref="InvalidOperationException">Thrown when <c>ln</c> fails.</exception>
-        Public Shared Sub CreateDirectorySymbolicLink(linkPath As String, targetPath As String)
-            If Not TestEnvironment.IsUnix Then
-                Throw New PlatformNotSupportedException("Directory symbolic links are only created on Unix by the tests.")
-            End If
+        ''' <exception cref="InvalidOperationException">Thrown when the link cannot be created.</exception>
+        Public Shared Sub CreateDirectoryLink(linkPath As String, targetPath As String)
+            Dim startInfo As Diagnostics.ProcessStartInfo =
+                If(TestEnvironment.IsUnix,
+                   New Diagnostics.ProcessStartInfo("ln", $"-s ""{targetPath}"" ""{linkPath}"""),
+                   New Diagnostics.ProcessStartInfo("cmd.exe", $"/c mklink /J ""{linkPath}"" ""{targetPath}"""))
 
-            Dim startInfo As New Diagnostics.ProcessStartInfo("ln", $"-s ""{targetPath}"" ""{linkPath}""") With {
-                .UseShellExecute = False,
-                .CreateNoWindow = True
-            }
+            startInfo.UseShellExecute = False
+            startInfo.CreateNoWindow = True
+            startInfo.RedirectStandardOutput = True
+            startInfo.RedirectStandardError = True
 
             Using process As Diagnostics.Process = Diagnostics.Process.Start(startInfo)
+                Dim standardOutput As String = process.StandardOutput.ReadToEnd()
+                Dim standardError As String = process.StandardError.ReadToEnd()
                 process.WaitForExit()
-                If process.ExitCode <> 0 Then
-                    Throw New InvalidOperationException($"'ln' failed with exit code {process.ExitCode}.")
+
+                If process.ExitCode <> 0 OrElse Not IO.Directory.Exists(linkPath) Then
+                    Throw New InvalidOperationException($"Could not create the directory link '{linkPath}' (exit code {process.ExitCode}): {standardOutput} {standardError}")
                 End If
             End Using
         End Sub

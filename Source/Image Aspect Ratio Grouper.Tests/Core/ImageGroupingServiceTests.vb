@@ -281,14 +281,13 @@ Namespace ImageAspectRatioGrouper.Tests.Core
         ''' Directory links (junctions, symbolic links) are reported and never followed, so a link that points
         ''' back to an ancestor cannot cause an infinite loop nor process the same images twice.
         ''' <para></para>
-        ''' Creating a directory link on Windows requires elevation, so this scenario runs where links are free (Unix).
+        ''' The link is a junction on Windows (no elevation required) and a symbolic link on Unix.
         ''' </summary>
-        <Fact(Skip:="Creating a directory symbolic link requires a Unix platform (on Windows it requires elevation).",
-              SkipUnless:=NameOf(TestEnvironment.IsUnix), SkipType:=GetType(TestEnvironment))>
+        <Fact>
         Public Async Function RunAsync_DoesNotFollowDirectoryLinks() As Task
             Using temp As New TemporaryDirectory()
                 TestImageFactory.CreateImage(temp.Combine("real", "image.png"), 640, 360)
-                TestEnvironment.CreateDirectorySymbolicLink(temp.Combine("real", "loop"), temp.FullPath)
+                TestEnvironment.CreateDirectoryLink(temp.Combine("real", "loop"), temp.FullPath)
                 Dim reports As New List(Of ImageGroupingProgress)()
 
                 Dim summary As ImageGroupingSummary = Await RunAsync(CreateOptions(temp.FullPath), reports).ConfigureAwait(False)

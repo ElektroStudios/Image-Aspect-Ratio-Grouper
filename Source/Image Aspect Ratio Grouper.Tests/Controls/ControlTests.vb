@@ -49,14 +49,57 @@ Namespace ImageAspectRatioGrouper.Tests.Controls
         End Sub
 
         ''' <summary>
-        ''' The toggle has no hidden inner margin: its default size is the size of the drawn track,
-        ''' which keeps it vertically centered against neighboring labels (regression).
+        ''' Without a caption, the toggle has no hidden inner margin: its size is exactly the size of the drawn track,
+        ''' which is derived from the font height (so it scales with the font and the DPI).
         ''' </summary>
         <Fact>
-        Public Sub ToggleSwitch_DefaultSize_IsTheTrackSize()
+        Public Sub ToggleSwitch_WithoutCaption_IsTheTrackSize()
             Using toggle As New ToggleSwitch()
-                Assert.Equal(New Size(40, 20), toggle.Size)
+                Dim trackHeight As Integer = toggle.Font.Height + 4
+                Assert.Equal(New Size(trackHeight * 2, trackHeight), toggle.Size)
+                Assert.Equal(New Rectangle(Point.Empty, toggle.Size), toggle.ComputeLayout().TrackBounds)
             End Using
+        End Sub
+
+        ''' <summary>
+        ''' With a caption, the toggle grows to fit it, and the caption is optically centered on the track: the center of
+        ''' its capital letters is aligned with the center of the track (regression for the caption looking misaligned).
+        ''' </summary>
+        <Fact>
+        Public Sub ToggleSwitch_WithCaption_GrowsToFitAndCentersTheCaptionOnTheTrack()
+            Using font As New Font(FontFamily.GenericSansSerif, 9.0F),
+                  toggle As New ToggleSwitch() With {.Font = font}
+
+                Dim trackOnlySize As Size = toggle.Size
+                toggle.Text = "Include subdirectories"
+                Dim layout As ToggleSwitch.ToggleSwitchLayout = toggle.ComputeLayout()
+
+                Assert.Equal(layout.Size, toggle.Size)
+                Assert.True(toggle.Width > trackOnlySize.Width, "The control must grow to fit the caption.")
+                Assert.True(layout.CaptionBounds.Left > layout.TrackBounds.Right, "The caption must be on the right of the track.")
+                Assert.True(New Rectangle(Point.Empty, layout.Size).Contains(layout.TrackBounds), "The track must fit within the control.")
+                Assert.True(New Rectangle(Point.Empty, layout.Size).Contains(layout.CaptionBounds), "The caption must fit within the control.")
+
+                Dim trackCenter As Double = layout.TrackBounds.Top + (layout.TrackBounds.Height / 2.0R)
+                Dim captionCapCenter As Double = layout.CaptionBounds.Top + ToggleSwitch.GetCapCenterFromLineTop(toggle.Font)
+                Assert.InRange(Math.Abs(captionCapCenter - trackCenter), 0.0R, 0.5R)
+
+                toggle.Text = String.Empty
+                Assert.Equal(trackOnlySize, toggle.Size)
+            End Using
+        End Sub
+
+        ''' <summary>
+        ''' The cap-height center lies within the line box, and a null font is rejected.
+        ''' </summary>
+        <Fact>
+        Public Sub ToggleSwitch_CapCenter_LiesWithinTheLineBox()
+            Using font As New Font(FontFamily.GenericSansSerif, 9.0F)
+                Dim capCenter As Double = ToggleSwitch.GetCapCenterFromLineTop(font)
+                Assert.InRange(capCenter, 1.0R, CDbl(font.GetHeight()) - 1.0R)
+            End Using
+
+            Assert.Throws(Of ArgumentNullException)(Sub() ToggleSwitch.GetCapCenterFromLineTop(Nothing))
         End Sub
 
         ''' <summary>
@@ -240,6 +283,63 @@ Namespace ImageAspectRatioGrouper.Tests.Controls
 
 #End Region
 
+#Region " ThemedComboBox "
+
+        ''' <summary>
+        ''' The combo box height is always the common input height, whatever height is requested and whatever
+        ''' height the hosted native combo box has (regression: it used to report the native height, 25 px instead of 28 px).
+        ''' </summary>
+        <Fact>
+        Public Sub ThemedComboBox_HeightIsAlwaysTheInputHeight()
+            StaThreadRunner.Run(
+                Sub()
+                    Using font As New Font(FontFamily.GenericSansSerif, 9.0F),
+                          form As New Form() With {.Font = font},
+                          comboBox As New ThemedComboBox()
+
+                        comboBox.Items.Add("Item")
+                        form.Controls.Add(comboBox)
+                        form.Show()
+
+                        ' The control must inherit the form font; otherwise its height is computed from another font.
+                        Assert.Equal(form.Font.Height, comboBox.Font.Height)
+
+                        Dim expectedHeight As Integer = ControlMetrics.GetInputHeight(form.Font)
+                        Assert.Equal(expectedHeight, comboBox.Height)
+
+                        comboBox.Height = expectedHeight * 3
+                        Assert.Equal(expectedHeight, comboBox.Height)
+
+                        form.Close()
+                    End Using
+                End Sub)
+        End Sub
+
+        ''' <summary>
+        ''' The container forwards the items, the selection and the selection change event of the hosted combo box.
+        ''' </summary>
+        <Fact>
+        Public Sub ThemedComboBox_ForwardsItemsAndSelection()
+            StaThreadRunner.Run(
+                Sub()
+                    Using comboBox As New ThemedComboBox()
+                        Dim raisedCount As Integer = 0
+                        AddHandler comboBox.SelectedIndexChanged, Sub(sender As Object, e As EventArgs) raisedCount += 1
+
+                        comboBox.Items.Add("A")
+                        comboBox.Items.Add("B")
+                        comboBox.SelectedItem = "B"
+
+                        Assert.Equal(1, comboBox.SelectedIndex)
+                        Assert.Equal("B", comboBox.SelectedItem)
+                        Assert.Equal(1, raisedCount)
+                        Assert.Throws(Of ArgumentNullException)(Sub() comboBox.SecondaryTextMember = Nothing)
+                    End Using
+                End Sub)
+        End Sub
+
+#End Region
+
 #Region " Input height consistency (Windows only) "
 
         ''' <summary>
@@ -260,6 +360,11 @@ Namespace ImageAspectRatioGrouper.Tests.Controls
 
                         ' The handles (and therefore the native combo box frame) only exist once the form is shown.
                         form.Show()
+
+                        ' Every control must inherit the form font; otherwise its height is computed from another font.
+                        Assert.Equal(form.Font.Height, textBox.Font.Height)
+                        Assert.Equal(form.Font.Height, numeric.Font.Height)
+                        Assert.Equal(form.Font.Height, comboBox.Font.Height)
 
                         Dim expectedHeight As Integer = ControlMetrics.GetInputHeight(form.Font)
                         Assert.Equal(expectedHeight, textBox.Height)

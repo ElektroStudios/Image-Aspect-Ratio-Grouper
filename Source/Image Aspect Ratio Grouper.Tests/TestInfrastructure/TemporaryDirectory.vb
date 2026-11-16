@@ -68,9 +68,26 @@ Namespace ImageAspectRatioGrouper.Tests.TestInfrastructure
             End If
 
             Me.isDisposed = True
-            If Directory.Exists(Me.FullPath) Then
-                Directory.Delete(Me.FullPath, recursive:=True)
+            If Not Directory.Exists(Me.FullPath) Then
+                Return
             End If
+
+            ' Directory links (junctions, symbolic links) are removed first, WITHOUT following them,
+            ' so a recursive delete can never reach (and delete) the content of the directory they point to.
+            Dim pending As New Stack(Of DirectoryInfo)()
+            pending.Push(New DirectoryInfo(Me.FullPath))
+
+            While pending.Count > 0
+                For Each subdirectory As DirectoryInfo In pending.Pop().GetDirectories()
+                    If (subdirectory.Attributes And FileAttributes.ReparsePoint) = FileAttributes.ReparsePoint Then
+                        subdirectory.Delete(recursive:=False)
+                    Else
+                        pending.Push(subdirectory)
+                    End If
+                Next
+            End While
+
+            Directory.Delete(Me.FullPath, recursive:=True)
         End Sub
 
 #End Region

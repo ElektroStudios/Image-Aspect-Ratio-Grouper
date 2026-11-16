@@ -92,7 +92,7 @@
     </Compile>
     <Compile Include="Controls\ThemedButtonStyle.vb" />
     <Compile Include="Controls\ThemedComboBox.vb">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ThemedLabel.vb">
       <SubType>Component</SubType>

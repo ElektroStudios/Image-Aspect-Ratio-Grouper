@@ -37,15 +37,12 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.helpMenuItem = New System.Windows.Forms.ToolStripMenuItem()
             Me.aboutMenuItem = New System.Windows.Forms.ToolStripMenuItem()
             Me.themeToggleItem = New ImageAspectRatioGrouper.Controls.ToolStripToggleSwitch()
-            Me.themeLabelItem = New System.Windows.Forms.ToolStripLabel()
             Me.rootLayout = New System.Windows.Forms.TableLayoutPanel()
             Me.settingsLayout = New System.Windows.Forms.TableLayoutPanel()
             Me.directoryLabel = New ImageAspectRatioGrouper.Controls.ThemedLabel()
             Me.directoryTextBox = New ImageAspectRatioGrouper.Controls.ThemedTextBox()
             Me.browseButton = New ImageAspectRatioGrouper.Controls.ThemedButton()
-            Me.recursiveLayout = New System.Windows.Forms.TableLayoutPanel()
             Me.recursiveToggle = New ImageAspectRatioGrouper.Controls.ToggleSwitch()
-            Me.recursiveLabel = New ImageAspectRatioGrouper.Controls.ThemedLabel()
             Me.aspectRatioLabel = New ImageAspectRatioGrouper.Controls.ThemedLabel()
             Me.ratioOptionsLayout = New System.Windows.Forms.TableLayoutPanel()
             Me.aspectRatioComboBox = New ImageAspectRatioGrouper.Controls.ThemedComboBox()
@@ -66,14 +63,13 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.appMenuStrip.SuspendLayout()
             Me.rootLayout.SuspendLayout()
             Me.settingsLayout.SuspendLayout()
-            Me.recursiveLayout.SuspendLayout()
             Me.ratioOptionsLayout.SuspendLayout()
             Me.executionLayout.SuspendLayout()
             Me.SuspendLayout()
             '
             'appMenuStrip
             '
-            Me.appMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.fileMenuItem, Me.helpMenuItem, Me.themeToggleItem, Me.themeLabelItem})
+            Me.appMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.fileMenuItem, Me.helpMenuItem, Me.themeToggleItem})
             Me.appMenuStrip.Location = New System.Drawing.Point(0, 0)
             Me.appMenuStrip.Name = "appMenuStrip"
             Me.appMenuStrip.Padding = New System.Windows.Forms.Padding(6, 3, 0, 3)
@@ -123,20 +119,11 @@ Namespace ImageAspectRatioGrouper.Forms
             'themeToggleItem
             '
             Me.themeToggleItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-            Me.themeToggleItem.AutoSize = False
             Me.themeToggleItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
             Me.themeToggleItem.ForeColor = System.Drawing.Color.FromArgb(CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer))
             Me.themeToggleItem.Name = "themeToggleItem"
-            Me.themeToggleItem.Size = New System.Drawing.Size(40, 20)
+            Me.themeToggleItem.Text = "Dark mode"
             Me.themeToggleItem.ToolTipText = "Switch between the dark and the light theme."
-            '
-            'themeLabelItem
-            '
-            Me.themeLabelItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-            Me.themeLabelItem.Name = "themeLabelItem"
-            Me.themeLabelItem.Size = New System.Drawing.Size(65, 19)
-            Me.themeLabelItem.Text = "Dark mode"
-            Me.themeLabelItem.ToolTipText = "Switch between the dark and the light theme."
             '
             'rootLayout
             '
@@ -171,7 +158,7 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.settingsLayout.Controls.Add(Me.directoryLabel, 0, 0)
             Me.settingsLayout.Controls.Add(Me.directoryTextBox, 1, 0)
             Me.settingsLayout.Controls.Add(Me.browseButton, 2, 0)
-            Me.settingsLayout.Controls.Add(Me.recursiveLayout, 1, 1)
+            Me.settingsLayout.Controls.Add(Me.recursiveToggle, 1, 1)
             Me.settingsLayout.Controls.Add(Me.aspectRatioLabel, 0, 2)
             Me.settingsLayout.Controls.Add(Me.ratioOptionsLayout, 1, 2)
             Me.settingsLayout.Dock = System.Windows.Forms.DockStyle.Fill
@@ -221,24 +208,6 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.toolTip.SetToolTip(Me.browseButton, "Select the directory that contains" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "the images to group (Ctrl+O).")
             Me.browseButton.UseVisualStyleBackColor = False
             '
-            'recursiveLayout
-            '
-            Me.recursiveLayout.Anchor = System.Windows.Forms.AnchorStyles.Left
-            Me.recursiveLayout.AutoSize = True
-            Me.recursiveLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.recursiveLayout.ColumnCount = 2
-            Me.recursiveLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-            Me.recursiveLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-            Me.recursiveLayout.Controls.Add(Me.recursiveToggle, 0, 0)
-            Me.recursiveLayout.Controls.Add(Me.recursiveLabel, 1, 0)
-            Me.recursiveLayout.Location = New System.Drawing.Point(98, 38)
-            Me.recursiveLayout.Margin = New System.Windows.Forms.Padding(0)
-            Me.recursiveLayout.Name = "recursiveLayout"
-            Me.recursiveLayout.RowCount = 1
-            Me.recursiveLayout.RowStyles.Add(New System.Windows.Forms.RowStyle())
-            Me.recursiveLayout.Size = New System.Drawing.Size(175, 26)
-            Me.recursiveLayout.TabIndex = 3
-            '
             'recursiveToggle
             '
             Me.recursiveToggle.AccessibleName = "Include subdirectories"
@@ -247,23 +216,12 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.recursiveToggle.BackColor = System.Drawing.Color.FromArgb(CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer), CType(CType(243, Byte), Integer))
             Me.recursiveToggle.Cursor = System.Windows.Forms.Cursors.Hand
             Me.recursiveToggle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer))
-            Me.recursiveToggle.Location = New System.Drawing.Point(3, 3)
+            Me.recursiveToggle.Location = New System.Drawing.Point(101, 40)
             Me.recursiveToggle.Name = "recursiveToggle"
-            Me.recursiveToggle.Size = New System.Drawing.Size(40, 20)
-            Me.recursiveToggle.TabIndex = 0
+            Me.recursiveToggle.Size = New System.Drawing.Size(171, 20)
+            Me.recursiveToggle.TabIndex = 3
+            Me.recursiveToggle.Text = "Include subdirectories"
             Me.toolTip.SetToolTip(Me.recursiveToggle, "When enabled, the images inside all the" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "subdirectories are processed too.")
-            '
-            'recursiveLabel
-            '
-            Me.recursiveLabel.Anchor = System.Windows.Forms.AnchorStyles.Left
-            Me.recursiveLabel.AutoSize = True
-            Me.recursiveLabel.Cursor = System.Windows.Forms.Cursors.Hand
-            Me.recursiveLabel.Location = New System.Drawing.Point(49, 5)
-            Me.recursiveLabel.Name = "recursiveLabel"
-            Me.recursiveLabel.Size = New System.Drawing.Size(123, 15)
-            Me.recursiveLabel.TabIndex = 1
-            Me.recursiveLabel.Text = "Include subdirectories"
-            Me.toolTip.SetToolTip(Me.recursiveLabel, "When enabled, the images inside all the" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "subdirectories are processed too.")
             '
             'aspectRatioLabel
             '
@@ -311,7 +269,6 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.aspectRatioComboBox.DropDownWidth = 440
             Me.aspectRatioComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer), CType(CType(27, Byte), Integer))
             Me.aspectRatioComboBox.IntegralHeight = False
-            Me.aspectRatioComboBox.ItemHeight = 22
             Me.aspectRatioComboBox.Location = New System.Drawing.Point(3, 6)
             Me.aspectRatioComboBox.MaxDropDownItems = 16
             Me.aspectRatioComboBox.Name = "aspectRatioComboBox"
@@ -488,7 +445,6 @@ Namespace ImageAspectRatioGrouper.Forms
             '
             'progressTimer
             '
-            '
             'MainForm
             '
             Me.AllowDrop = True
@@ -509,8 +465,6 @@ Namespace ImageAspectRatioGrouper.Forms
             Me.rootLayout.PerformLayout()
             Me.settingsLayout.ResumeLayout(False)
             Me.settingsLayout.PerformLayout()
-            Me.recursiveLayout.ResumeLayout(False)
-            Me.recursiveLayout.PerformLayout()
             Me.ratioOptionsLayout.ResumeLayout(False)
             Me.ratioOptionsLayout.PerformLayout()
             Me.executionLayout.ResumeLayout(False)
@@ -528,15 +482,12 @@ Namespace ImageAspectRatioGrouper.Forms
         Friend WithEvents helpMenuItem As System.Windows.Forms.ToolStripMenuItem
         Friend WithEvents aboutMenuItem As System.Windows.Forms.ToolStripMenuItem
         Friend WithEvents themeToggleItem As ImageAspectRatioGrouper.Controls.ToolStripToggleSwitch
-        Friend WithEvents themeLabelItem As System.Windows.Forms.ToolStripLabel
         Friend WithEvents rootLayout As System.Windows.Forms.TableLayoutPanel
         Friend WithEvents settingsLayout As System.Windows.Forms.TableLayoutPanel
         Friend WithEvents directoryLabel As ImageAspectRatioGrouper.Controls.ThemedLabel
         Friend WithEvents directoryTextBox As ImageAspectRatioGrouper.Controls.ThemedTextBox
         Friend WithEvents browseButton As ImageAspectRatioGrouper.Controls.ThemedButton
-        Friend WithEvents recursiveLayout As System.Windows.Forms.TableLayoutPanel
         Friend WithEvents recursiveToggle As ImageAspectRatioGrouper.Controls.ToggleSwitch
-        Friend WithEvents recursiveLabel As ImageAspectRatioGrouper.Controls.ThemedLabel
         Friend WithEvents aspectRatioLabel As ImageAspectRatioGrouper.Controls.ThemedLabel
         Friend WithEvents ratioOptionsLayout As System.Windows.Forms.TableLayoutPanel
         Friend WithEvents aspectRatioComboBox As ImageAspectRatioGrouper.Controls.ThemedComboBox
