@@ -2,9 +2,9 @@
 # CUSTOMIZABLE TEMPLATE REPOSITORY VARIABLES
 # 
 env:
-  SOLUTION_NAME: "PROJECT_NAME"
+  SOLUTION_NAME: "Image Aspect Ratio Grouper"
   SOLUTION_EXT:  "slnx"
-  SONAR_PROJECT_KEY:  "ElektroStudios_PROJECT_NAME"
+  SONAR_PROJECT_KEY:  "ElektroStudios_Image-Aspect-Ratio-Grouper"
   SONAR_ORGANIZATION: "elektrostudios"
 # ------------------------------------------
 
