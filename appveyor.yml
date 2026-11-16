@@ -35,9 +35,10 @@ before_build:
 
 build_script:
   - msbuild "Source\%APP_DIR_NAME%.%SOLUTION_EXT%" /p:Configuration=%configuration% /maxcpucount
+  - dotnet build "Source\%APP_DIR_NAME%.Tests\%APP_DIR_NAME%.Tests.vbproj" -c %configuration%
 
 test_script:
-  - dotnet test "Source\%APP_DIR_NAME%.Tests\bin\%configuration%\net48\%APP_DIR_NAME%.Tests.exe"
+  - '"Source\%APP_DIR_NAME%.Tests\bin\%configuration%\net48\%APP_DIR_NAME%.Tests.exe"'
 
 after_build:
   - >-
