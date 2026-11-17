@@ -54,9 +54,10 @@
     <PackageReference Include="SkiaSharp" Version="4.156.1" />
   </ItemGroup>
 
-  <!-- See the same target in the Core project: the arm64 native library is never used. -->
-  <Target Name="RemoveUnusedSkiaSharpArm64Library" AfterTargets="Build">
+  <!-- See the same target in the Core project: the arm64 and macOS native libraries are never used. -->
+  <Target Name="RemoveUnusedSkiaSharpNativeLibraries" AfterTargets="Build">
     <RemoveDir Directories="$(OutDir)arm64" />
+    <Delete Files="$(OutDir)libSkiaSharp.dylib" />
   </Target>
 
 </Project>

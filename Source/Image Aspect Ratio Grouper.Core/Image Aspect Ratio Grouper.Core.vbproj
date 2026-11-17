@@ -47,12 +47,14 @@
   </ItemGroup>
 
   <!--
-    SkiaSharp copies its native library (libSkiaSharp.dll) into x86, x64 and arm64 subfolders, and loads the one that
+    SkiaSharp copies its native library into x86, x64 and arm64 subfolders (libSkiaSharp.dll), and loads the one that
     matches the process architecture. The AnyCPU .NET Framework 4.8 applications run as x64 on 64-bit Windows and as
-    x86 on 32-bit Windows (on Windows on ARM they run as emulated x64), so the arm64 folder is never used.
+    x86 on 32-bit Windows (on Windows on ARM they run as emulated x64), so the arm64 folder is never used. The macOS
+    native library (libSkiaSharp.dylib) is never used on Windows either.
   -->
-  <Target Name="RemoveUnusedSkiaSharpArm64Library" AfterTargets="Build">
+  <Target Name="RemoveUnusedSkiaSharpNativeLibraries" AfterTargets="Build">
     <RemoveDir Directories="$(OutDir)arm64" />
+    <Delete Files="$(OutDir)libSkiaSharp.dylib" />
   </Target>
 
 </Project>
