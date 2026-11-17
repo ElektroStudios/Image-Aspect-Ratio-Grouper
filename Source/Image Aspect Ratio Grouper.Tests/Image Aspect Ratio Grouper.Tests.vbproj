@@ -21,6 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="4.156.1" />
     <PackageReference Include="xunit.v3" Version="4.0.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -31,6 +32,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Image Aspect Ratio Grouper\Image Aspect Ratio Grouper.vbproj" />
+    <ProjectReference Include="..\Image Aspect Ratio Grouper.Core\Image Aspect Ratio Grouper.Core.vbproj" />
+    <ProjectReference Include="..\Image Aspect Ratio Grouper.CLI\Image Aspect Ratio Grouper.CLI.vbproj" />
   </ItemGroup>
 
   <ItemGroup>

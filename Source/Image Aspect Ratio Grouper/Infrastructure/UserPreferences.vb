@@ -23,22 +23,22 @@ Namespace ImageAspectRatioGrouper.Infrastructure
         ''' <summary>
         ''' The minimum allowed aspect ratio tolerance, in pixels.
         ''' </summary>
-        Friend Const MinimumTolerancePixels As Integer = 0
+        Friend Const MinimumTolerancePixels As Integer = ImageGroupingOptions.MinimumTolerancePixels
 
         ''' <summary>
         ''' The maximum allowed aspect ratio tolerance, in pixels.
         ''' </summary>
-        Friend Const MaximumTolerancePixels As Integer = 100
+        Friend Const MaximumTolerancePixels As Integer = ImageGroupingOptions.MaximumTolerancePixels
 
         ''' <summary>
         ''' The lowest allowed value for the minimum result height, in pixels.
         ''' </summary>
-        Friend Const MinimumHeightLowerBound As Integer = 0
+        Friend Const MinimumHeightLowerBound As Integer = ImageGroupingOptions.MinimumHeightLowerBound
 
         ''' <summary>
         ''' The highest allowed value for the minimum result height, in pixels.
         ''' </summary>
-        Friend Const MinimumHeightUpperBound As Integer = 10000
+        Friend Const MinimumHeightUpperBound As Integer = ImageGroupingOptions.MinimumHeightUpperBound
 
 #End Region
 

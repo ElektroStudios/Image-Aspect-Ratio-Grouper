@@ -29,11 +29,25 @@ Namespace ImageAspectRatioGrouper.Core
         Public Const DefaultMinimumHeight As Integer = 480
 
         ''' <summary>
-        ''' The array of strictly allowed image file extensions to process.
+        ''' The smallest allowed tolerance, in pixels.
         ''' </summary>
-        Private Shared ReadOnly DefaultExtensions As String() = {
-            ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"
-        }
+        Public Const MinimumTolerancePixels As Integer = 0
+
+        ''' <summary>
+        ''' The largest allowed tolerance, in pixels.
+        ''' </summary>
+        Public Const MaximumTolerancePixels As Integer = 100
+
+        ''' <summary>
+        ''' The smallest allowed minimum result height, in pixels.
+        ''' </summary>
+        Public Const MinimumHeightLowerBound As Integer = 0
+
+        ''' <summary>
+        ''' The largest allowed minimum result height, in pixels.
+        ''' </summary>
+        Public Const MinimumHeightUpperBound As Integer = 10000
+
 
 #End Region
 
@@ -128,7 +142,7 @@ Namespace ImageAspectRatioGrouper.Core
             Me.MinimumHeight = minimumHeight
             Me.AlreadyConformingFolderName = ImageGroupingOptions.GetAlreadyConformingFolderName(aspectRatio)
             Me.IncompatibleFolderName = ImageGroupingOptions.GetIncompatibleFolderName(aspectRatio)
-            Me.AllowedExtensions = Array.AsReadOnly(ImageGroupingOptions.DefaultExtensions)
+            Me.AllowedExtensions = ImageDimensionReader.SupportedExtensions
         End Sub
 
 #End Region

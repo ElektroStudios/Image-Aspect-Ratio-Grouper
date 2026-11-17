@@ -8,6 +8,7 @@ Imports System.Windows.Forms
 
 Imports Microsoft.VisualBasic.ApplicationServices
 
+Imports ImageAspectRatioGrouper.Core
 Imports ImageAspectRatioGrouper.Infrastructure
 Imports ImageAspectRatioGrouper.Theming
 
@@ -21,10 +22,22 @@ Namespace My
     Partial Friend Class MyApplication
 
         ''' <summary>
-        ''' Runs before the main form is created: migrates settings and activates the persisted theme,
-        ''' so that the very first window handle is already created with the right title bar color.
+        ''' Runs before the main form is created: verifies the native SkiaSharp library, reads the command-line argument
+        ''' (a directory to select), migrates settings and activates the persisted theme, so that the very first window
+        ''' handle is already created with the right title bar color.
         ''' </summary>
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+            Try
+                ImageDimensionReader.EnsureSkiaSharpIsAvailable()
+            Catch ex As InvalidOperationException
+                MessageBox.Show(ex.Message, $"{My.Application.Info.Title} - Missing Component",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error)
+                e.Cancel = True
+                Return
+            End Try
+
+            StartupArguments.Current = StartupArguments.Parse(e.CommandLine, Environment.CurrentDirectory)
+
             UserPreferences.UpgradeIfRequired()
             ThemeManager.SetTheme(UserPreferences.Theme)
         End Sub

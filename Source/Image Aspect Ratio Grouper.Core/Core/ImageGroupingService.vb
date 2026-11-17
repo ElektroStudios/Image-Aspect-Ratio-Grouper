@@ -338,13 +338,9 @@ Namespace ImageAspectRatioGrouper.Core
                 Throw New FileNotFoundException($"The target file does not exist or was moved: {imageFile.FullName}", imageFile.FullName)
             End If
 
-            Using fileStream As New FileStream(imageFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read)
-                ' validateImageData:=False reads only the header (dimensions) instead of decoding the full bitmap.
-                Using img As Image = Image.FromStream(fileStream, useEmbeddedColorManagement:=False, validateImageData:=False)
-                    classification = AspectRatioCalculator.Classify(img.Width, img.Height, options.AspectRatio,
-                                                                    options.TolerancePixels, options.MinimumHeight)
-                End Using
-            End Using
+            Dim imageSize As Size = ImageDimensionReader.ReadSize(imageFile.FullName)
+            classification = AspectRatioCalculator.Classify(imageSize.Width, imageSize.Height, options.AspectRatio,
+                                                            options.TolerancePixels, options.MinimumHeight)
 
             targetFolderName = AspectRatioCalculator.ResolveTargetFolderName(classification, options)
 

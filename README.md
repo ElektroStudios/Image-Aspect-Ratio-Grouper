@@ -97,6 +97,7 @@ Keeping a wallpaper collection consistent is a grind. Images come in every imagi
 ## ✨ Features
 
 - Common desktop (landscape) and mobile (portrait) aspect ratios to choose from.
+- Supported formats: JPEG, PNG, BMP, TIFF, WebP, AVIF and ICO (only the image header is read, so it is fast even with huge files).
 - Configurable pixel tolerance and minimum resulting height.
 - Optional search in all subdirectories.
 - Fast, multi-threaded processing that can be cancelled at any time.
@@ -105,6 +106,7 @@ Keeping a wallpaper collection consistent is a grind. Images come in every imagi
 - Dark and light themes.
 - Drag and drop a folder onto the window to select it.
 - Remembers your preferences between sessions.
+- Command-line application (`Image Aspect Ratio Grouper.CLI.exe`), to group the images from the console or from scripts.
 
 ## 📝 Requirements
 
@@ -119,6 +121,43 @@ Keeping a wallpaper collection consistent is a grind. Images come in every imagi
    <br> 
    If you downloaded the `.exe` file, run it and follow the installation wizard.
 4. Run the executable file to launch the application.
+
+## ⌨️ Command-Line Usage
+
+The command-line application is `Image Aspect Ratio Grouper.CLI.exe`:
+
+```
+"Image Aspect Ratio Grouper.CLI.exe" <directory> [options]   Groups the images of the directory.
+"Image Aspect Ratio Grouper.CLI.exe" /?                      Shows the help (also without arguments).
+```
+
+| Option | Description | Default |
+|---|---|---|
+| `/recursive`, `/r` | Also processes the subdirectories. | Off |
+| `/ratio:<ratio>`, `/a:<ratio>` | Target aspect ratio: `16:9`, `16:10`, `21:9`, `32:9`, `3:2`, `4:3`, `5:4`, `1:1`, `9:16`, `9:19.5`, `9:20`, `9:21`, `10:16` or `3:4`. | `16:9` |
+| `/tolerance:<n>`, `/t:<n>` | Maximum difference, in pixels, between the image height and the exact height of the ratio (0 to 100). | 3 |
+| `/minheight:<n>`, `/m:<n>` | Minimum result height, in pixels (0 to 10000). Images that would end up smaller go to the incompatible folder. | 480 |
+
+Switches are case-insensitive, can also start with `-` or `--`, and values can also be written with `=`. The command line never uses nor changes the settings of the main window.
+
+| Exit code | Meaning |
+|---|---|
+| 0 | Success (or the help was shown). |
+| 1 | Completed, but some images failed and stayed in place. |
+| 2 | Invalid command-line arguments. |
+| 3 | The directory does not exist or its path is not valid. |
+| 4 | The operation failed (e.g. inaccessible directory). |
+| 5 | Cancelled by the user (Ctrl+C). |
+| 6 | A required component is missing (libSkiaSharp.dll). |
+
+Examples:
+
+```
+"Image Aspect Ratio Grouper.CLI.exe" "C:\Wallpapers" /recursive /ratio:16:10
+"Image Aspect Ratio Grouper.CLI.exe" "C:\Phone" /ratio:9:16 /minheight:1280
+```
+
+The main window also accepts a directory, which is selected on startup: `"Image Aspect Ratio Grouper.exe" "C:\Wallpapers"`. The full reference is also available in the main window, under Help > Command-Line Reference.
 
 ## 🔄 Change Log
 
@@ -157,6 +196,7 @@ This work relies on the following technologies and libraries:
 
  - [.NET Framework](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
  - [Ookii.Dialogs.WinForms](https://github.com/ookii-dialogs/ookii-dialogs-winforms)
+ - [SkiaSharp](https://github.com/mono/SkiaSharp)
 
 ## ⚠️ Disclaimer
 
